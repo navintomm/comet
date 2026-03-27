@@ -1,0 +1,293 @@
+/* ════════════════════════════════════
+   CINEMATIC SEQUENCE – CSS
+   ════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,700&family=Barlow+Condensed:wght@500;600;700;800&display=swap');
+
+.sequence-container {
+  height: 100vh;
+  width: 100vw;
+  background-color: #f7f4ed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.sequence-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.loading-simple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: #86868b;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/* ════════════════
+   BASE LAYER
+   ════════════════ */
+.cine-layer {
+  position: absolute;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  /* Hint to browser for GPU-accelerated, silky-smooth animations on mobile */
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* ════════════════
+   POSITIONS
+   ════════════════ */
+
+/* CENTER — intro: sit upper-left, clear of product card area */
+.cine-center {
+  top: 8%;
+  left: 6%;
+  bottom: auto;
+  transform: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.5rem;
+}
+
+
+/* BOTTOM override */
+.cine-bottom {
+  top: auto !important;
+  bottom: 10%;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+/* LEFT PANEL */
+.cine-left {
+  top: 50%;
+  left: 6%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.8rem;
+  text-align: left;
+}
+
+.cine-right {
+  top: 50%;
+  right: 6%;
+  left: auto;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.8rem;
+  text-align: right;
+}
+
+
+/* ════════════════
+   VERTICAL LABEL
+   ════════════════ */
+.cine-vertical {
+  opacity: 0;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 0.6rem;
+  letter-spacing: 0.5em;    /* wide tracking = premium */
+  text-transform: uppercase;
+  color: #aaaaaa;           /* slightly lighter — more delicate */
+  font-weight: 700;
+  white-space: nowrap;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+  /* Thin left border makes it feel like a print magazine rule */
+  border-left: 1px solid rgba(0,0,0,0.1);
+  padding-left: 6px;
+}
+
+/* ════════════════
+   MAIN CONTENT BLOCK
+   ════════════════ */
+.cine-main-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cine-main-block--right {
+  align-items: flex-end;
+}
+
+/* ════════════════
+   TYPOGRAPHY
+   ════════════════ */
+
+/* Large feature heading */
+.cine-title {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 0.88;
+  color: #0d0d0d;
+  margin: 0;
+  text-transform: uppercase;
+  /* Dual shadow: light halo + faint dark drop — readable on any frame */
+  text-shadow:
+    0 0 20px rgba(255,255,255,0.8),
+    0 0 40px rgba(255,255,255,0.4),
+    1px 1px 0 rgba(255,255,255,0.6);
+}
+
+/* Intro / Outro headline */
+.cine-headline {
+  font-family: 'Barlow Condensed', 'Inter', sans-serif;
+  font-size: clamp(4.5rem, 10vw, 10rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 0.85;
+  color: #0d0d0d;
+  margin: 0;
+  text-transform: uppercase;
+  text-align: left;
+  text-shadow:
+    0 0 24px rgba(255,255,255,0.9),
+    0 0 48px rgba(255,255,255,0.4),
+    1px 2px 0 rgba(255,255,255,0.5);
+}
+
+/* Small label above intro */
+.cine-subtitle {
+  font-size: 0.7rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: #86868b;
+  font-weight: 600;
+  /* Thin separator line before label */
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.cine-subtitle::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: #86868b;
+  flex-shrink: 0;
+}
+
+/* Outro final section: re-center */
+.cine-layer[style] .cine-headline {
+  text-align: center;
+}
+
+/* Body subtext */
+.cine-sub {
+  opacity: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1d1d1f;           /* Dark for visibility */
+  font-weight: 500;
+  letter-spacing: 0;
+  max-width: 320px;
+  margin: 0;
+  border-left: 2px solid rgba(0,0,0,0.2);
+  padding-left: 0.75rem;
+  font-style: italic;
+}
+
+.cine-main-block--right .cine-sub {
+  text-align: right;
+}
+
+/* ════════════════
+   CTA BUTTON
+   ════════════════ */
+.apple-cta {
+  pointer-events: auto;
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: linear-gradient(135deg, #1d1d1f, #2a2a2c);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s;
+  text-decoration: none;
+}
+
+.apple-cta:hover {
+  transform: scale(1.04);
+  background: linear-gradient(135deg, #2a2a2c, #1d1d1f);
+}
+
+/* ════════════════
+   MOBILE
+   ════════════════ */
+@media (max-width: 768px) {
+  .cine-left, .cine-right {
+    left: 4% !important;
+    right: 4% !important;
+    top: 7%;
+    bottom: auto;
+    transform: none !important;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+    text-align: left;
+    width: 92%;
+  }
+
+  .cine-vertical {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+  }
+
+  .cine-title {
+    font-size: clamp(2.2rem, 12vw, 3.2rem);
+  }
+
+  .cine-headline {
+    font-size: clamp(3rem, 15vw, 4.5rem);
+  }
+
+  .cine-sub {
+    max-width: 100%;
+    font-size: 0.95rem;
+    padding: 0.8rem 0;
+  }
+
+  .cine-bottom {
+    bottom: 5% !important;
+  }
+}

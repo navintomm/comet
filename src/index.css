@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap');
+
+:root {
+  --bg-primary: #f7f4ed;
+  --bg-secondary: #ebdcd0;
+  --text-primary: #1c1a19;
+  --text-secondary: #5c5552;
+  --accent: #d2a87b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Smooth font rendering everywhere */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  /* Snap-smooth scroll */
+  scroll-behavior: smooth;
+  /* Better tap highlight on mobile */
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent font inflation on landscape mobile */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  /* Momentum scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Typography styles */
+.display-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 1rem;
+}
+
+.lead-text {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+/* Utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.vh-100 {
+  height: 100vh;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 5px;
+}
