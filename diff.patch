@@ -1,0 +1,77 @@
+﻿diff --git a/src/App.jsx b/src/App.jsx
+index 1bf0ad4..438eb23 100644
+--- a/src/App.jsx
++++ b/src/App.jsx
+@@ -82,7 +82,7 @@ function App() {
+       <section className="final-section">
+         {/* Full-bleed lifestyle image */}
+         <img
+-          src="/images/comet_lifestyle.png"
++          src={`${import.meta.env.BASE_URL}images/comet_lifestyle.png`}
+           alt="Comet X Lows lifestyle"
+           className="final-bg-img"
+         />
+diff --git a/src/components/CinematicSequence.jsx b/src/components/CinematicSequence.jsx
+index b39eb18..5dca30a 100644
+--- a/src/components/CinematicSequence.jsx
++++ b/src/components/CinematicSequence.jsx
+@@ -17,8 +17,9 @@ const CinematicSequence = () => {
+   const [imagesLoaded, setImagesLoaded] = useState(false);
+ 
+   const frameCount = 240;
++  const base = import.meta.env.BASE_URL;
+   const currentFrame = (index) =>
+-    `/images/herosection/frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.png`;
++    `${base}images/herosection/frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.png`;
+ 
+   useEffect(() => {
+     const canvas = canvasRef.current;
+@@ -26,19 +27,27 @@ const CinematicSequence = () => {
+     const images = [];
+     const animationState = { frame: 0 };
+     let loadedCount = 0;
++    const checkLoaded = (imageObj) => {
++      loadedCount++;
++      // Set canvas size from the first successfully loaded image
++      if (imageObj && imageObj.naturalWidth && !canvas.width) {
++        canvas.width = imageObj.naturalWidth;
++        canvas.height = imageObj.naturalHeight;
++        render();
++      }
++      if (loadedCount === frameCount) {
++        setImagesLoaded(true);
++      }
++    };
+ 
+     for (let i = 0; i < frameCount; i++) {
+       const img = new Image();
+       img.src = currentFrame(i);
+       images.push(img);
+-      img.onload = () => {
+-        loadedCount++;
+-        if (loadedCount === 1) {
+-          canvas.width = images[0].width || 1920;
+-          canvas.height = images[0].height || 1080;
+-          render();
+-        }
+-        if (loadedCount === frameCount) setImagesLoaded(true);
++      img.onload = () => checkLoaded(img);
++      img.onerror = () => {
++        console.error(`Failed to load image: ${currentFrame(i)}. Proceeding to avoid hanging.`);
++        checkLoaded(null);
+       };
+     }
+ 
+diff --git a/src/components/InteractiveHero.jsx b/src/components/InteractiveHero.jsx
+index c73c9f7..3a634d9 100644
+--- a/src/components/InteractiveHero.jsx
++++ b/src/components/InteractiveHero.jsx
+@@ -53,7 +53,7 @@ const InteractiveHero = () => {
+       {/* ΓöÇΓöÇ Full-viewport model image ΓöÇΓöÇ */}
+       <div className="hero-image-layer">
+         <img
+-          src="/images/hero_model_sneakers.png"
++          src={`${import.meta.env.BASE_URL}images/hero_model_sneakers.png`}
+           alt="Comet X Lifestyle"
+           className="hero-model-img"
+         />

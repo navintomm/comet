@@ -53,7 +53,7 @@ const InteractiveHero = () => {
       {/* ── Full-viewport model image ── */}
       <div className="hero-image-layer">
         <img
-          src="/images/hero_model_sneakers.png"
+          src={`${import.meta.env.BASE_URL}images/hero_model_sneakers.png`}
           alt="Comet X Lifestyle"
           className="hero-model-img"
         />

@@ -82,7 +82,7 @@ function App() {
       <section className="final-section">
         {/* Full-bleed lifestyle image */}
         <img
-          src="/images/comet_lifestyle.png"
+          src={`${import.meta.env.BASE_URL}images/comet_lifestyle.png`}
           alt="Comet X Lows lifestyle"
           className="final-bg-img"
         />

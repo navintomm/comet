@@ -6,7 +6,7 @@ import './CinematicSequence.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const CinematicSequence = () => {
-  const canvasRef = useRef(null);
+  const videoRef = useRef(null);
   const containerRef = useRef(null);
   const text1Ref = useRef(null);
   const text2Ref = useRef(null);
@@ -16,37 +16,24 @@ const CinematicSequence = () => {
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  const frameCount = 240;
-  const currentFrame = (index) =>
-    `/images/herosection/frames/ezgif-frame-${(index + 1).toString().padStart(3, '0')}.png`;
+  const base = import.meta.env.BASE_URL;
+  const videoSrc = `${base}images/herosection/hero_sequence.mp4`;
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    const images = [];
-    const animationState = { frame: 0 };
-    let loadedCount = 0;
+    const video = videoRef.current;
+    
+    // Fallback: forcefully mark loaded after 2 seconds just in case canplaythrough delays on some mobile connections
+    const fallbackTimeout = setTimeout(() => {
+      setImagesLoaded(true);
+    }, 2000);
 
-    for (let i = 0; i < frameCount; i++) {
-      const img = new Image();
-      img.src = currentFrame(i);
-      images.push(img);
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === 1) {
-          canvas.width = images[0].width || 1920;
-          canvas.height = images[0].height || 1080;
-          render();
-        }
-        if (loadedCount === frameCount) setImagesLoaded(true);
-      };
-    }
+    const handleLoadedMetadata = () => {
+      // Force fetching first frame eagerly on mobile
+      video.currentTime = 0.01;
+    };
 
-    function render() {
-      if (images[animationState.frame]) {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(images[animationState.frame], 0, 0, canvas.width, canvas.height);
-      }
+    if (video) {
+      video.addEventListener('loadedmetadata', handleLoadedMetadata);
     }
 
     const tl = gsap.timeline({
@@ -59,12 +46,19 @@ const CinematicSequence = () => {
       },
     });
 
-    // Canvas frame scrub
+    // Video scrubbing animation over virtual timeline
+    // Video has 240 frames at 24fps = 10 sec duration
+    const animationState = { time: 0 };
     tl.to(animationState, {
-      frame: frameCount - 1,
-      snap: 'frame',
+      time: 9.99, // Just under 10s to avoid ending blank frame
       ease: 'none',
-      onUpdate: render,
+      onUpdate: () => {
+        if (video && video.readyState >= 1) { // 1 = HAVE_METADATA
+          try {
+            video.currentTime = animationState.time;
+          } catch(e) {} // fail silently to avoid crashing scrolltrigger
+        }
+      },
       duration: 10,
     }, 0);
 
@@ -119,7 +113,11 @@ const CinematicSequence = () => {
       { opacity: 0, y: 50 },
       { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 8.5);
 
-    return () => { ScrollTrigger.getAll().forEach((t) => t.kill()); };
+    return () => { 
+      ScrollTrigger.getAll().forEach((t) => t.kill()); 
+      clearTimeout(fallbackTimeout);
+      if (video) video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+    };
   }, []);
 
   return (
@@ -128,7 +126,16 @@ const CinematicSequence = () => {
         <div className="loading-simple">Loading Product Experience...</div>
       )}
 
-      <canvas ref={canvasRef} className="sequence-canvas" />
+      {/* Video replaces the canvas — muted and playsInline mandatory for iOS inline scrubbing */}
+      <video 
+        ref={videoRef} 
+        className="sequence-canvas" 
+        src={videoSrc}
+        playsInline 
+        muted 
+        preload="auto"
+        onCanPlayThrough={() => setImagesLoaded(true)}
+      />
 
 
       {/* ── 2: Flawless Form (LEFT panel) ── */}
